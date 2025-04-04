@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { ThemeProvider, CssBaseline } from '@mui/material';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { store } from './store';
 import AppRoutes from './routes';
 import theme from './theme';
@@ -9,6 +9,7 @@ import { fetchUser } from './store/slices/authSlice';
 import Dashboard from './components/Dashboard';
 import DashboardAccessManager from './components/DashboardAccessManager';
 import DashboardLogin from './components/DashboardLogin';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 
 const App = () => {
     useEffect(() => {

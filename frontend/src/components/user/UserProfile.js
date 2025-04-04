@@ -26,7 +26,8 @@ import {
     MoreVert as MoreVertIcon,
     Person as PersonIcon,
     Email as EmailIcon,
-    CalendarToday as CalendarIcon
+    CalendarToday as CalendarIcon,
+    Delete as DeleteIcon
 } from '@mui/icons-material';
 import { formatDistanceToNow } from 'date-fns';
 
