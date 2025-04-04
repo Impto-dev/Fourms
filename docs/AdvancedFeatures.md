@@ -26,7 +26,7 @@ The Analytics Dashboard provides real-time insights into forum activity, user be
 
 - **Performance Metrics**
   - API response times
-  - System error rates
+  - System error rates    
   - Active user counts
   - System load monitoring
 

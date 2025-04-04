@@ -11,7 +11,8 @@
     "test:coverage": "nyc mocha --timeout 10000 --exit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "migrate": "node src/database/migrations/runMigrations.js"
+    "migrate": "node src/database/migrations/runMigrations.js",
+    "build": "npm ci && npm run lint && mkdir -p dist && cp -r src/* dist/ && cp package*.json dist/ && cp .env.example dist/.env"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

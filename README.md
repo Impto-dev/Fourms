@@ -152,4 +152,37 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-For support, please open an issue in the GitHub repository or contact the maintainers. 
+For support, please open an issue in the GitHub repository or contact the maintainers.
+
+## Deployment Guide
+
+### Prerequisites
+- A VPS with Ubuntu 22.04
+- A domain name pointing to your VPS
+- Basic command line knowledge
+- SSH access to the server
+
+### Deployment Steps
+
+1. **Initial Server Setup:**
+   - Connect to your VPS and update system packages.
+   - Create a new user and configure SSH for security.
+   - Set up a firewall to allow OpenSSH.
+
+2. **Install Required Software:**
+   - Install Node.js, MongoDB, Redis, Apache, and PM2.
+
+3. **Configure Apache:**
+   - Enable necessary modules and create a virtual host file.
+   - Add configuration for your domain and restart Apache.
+
+4. **Deploy Application:**
+   - Clone the repository to your server.
+   - Install dependencies and build both backend and frontend.
+   - Start the backend using PM2.
+
+5. **Secure the Server:**
+   - Install Certbot for SSL and set up automatic renewal.
+
+6. **Monitoring and Maintenance:**
+   - Set up log rotation and regularly update your system. 
