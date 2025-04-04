@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thread - Forum Website</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/forum.css">
+    <link rel="stylesheet" href="../css/thread.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>Forum</h1>
+            </div>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="forum.html">Forum</a>
+                <a href="upgrade.html">Upgrade</a>
+                <div class="user-menu">
+                    <span id="usernameDisplay">Guest</span>
+                    <div class="dropdown-content">
+                        <a href="profile.html">Profile</a>
+                        <a href="#" id="logoutBtn">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="thread-container">
+        <div class="thread-header">
+            <h2 id="threadTitle">Loading thread...</h2>
+            <div class="thread-meta">
+                <span>Started by <a href="#" id="threadAuthor">Loading...</a></span>
+                <span id="threadDate">Loading...</span>
+            </div>
+        </div>
+
+        <div class="posts">
+            <!-- Original post -->
+            <div class="post original-post">
+                <div class="post-author">
+                    <img src="../assets/images/default-avatar.png" alt="Avatar" class="avatar">
+                    <div class="author-info">
+                        <a href="#" id="originalAuthor">Loading...</a>
+                        <span class="post-date" id="originalPostDate">Loading...</span>
+                    </div>
+                </div>
+                <div class="post-content" id="originalPostContent">
+                    Loading...
+                </div>
+                <div class="post-actions">
+                    <button class="btn small" id="likeBtn">Like</button>
+                    <button class="btn small" id="quoteBtn">Quote</button>
+                    <button class="btn small" id="reportBtn">Report</button>
+                </div>
+            </div>
+
+            <!-- Replies will be loaded here -->
+            <div id="replies"></div>
+        </div>
+
+        <!-- Reply form -->
+        <div class="reply-form">
+            <h3>Post a Reply</h3>
+            <form id="replyForm">
+                <div class="form-group">
+                    <textarea id="replyContent" required placeholder="Write your reply here..."></textarea>
+                </div>
+                <button type="submit" class="btn primary">Post Reply</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Forum Website. All rights reserved.</p>
+    </footer>
+
+    <script src="../js/utils/session.js"></script>
+    <script src="../js/api/authService.js"></script>
+    <script src="../js/thread.js"></script>
+</body>
+</html> 

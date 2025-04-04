@@ -1,0 +1,39 @@
+{
+  "scripts": {
+    "test": "mocha backend/tests/*.test.js",
+    "test:watch": "mocha backend/tests/*.test.js --watch",
+    "test:coverage": "nyc --reporter=html --reporter=text mocha backend/tests/*.test.js && node scripts/save-coverage.js",
+    "test:coverage:ci": "nyc --reporter=lcov mocha backend/tests/*.test.js && node scripts/save-coverage.js",
+    "coverage:fix": "node scripts/coverage-fix.js",
+    "coverage:save": "node scripts/save-coverage.js",
+    "coverage:view": "serve coverage/lcov-report",
+    "test:load": "node backend/tests/load/run-load-tests.js",
+    "test:load:report": "artillery report backend/tests/load/artillery-report.json"
+  },
+  "nyc": {
+    "check-coverage": true,
+    "per-file": true,
+    "lines": 80,
+    "statements": 80,
+    "functions": 80,
+    "branches": 80,
+    "include": [
+      "backend/**/*.js"
+    ],
+    "exclude": [
+      "backend/tests/**/*.js",
+      "backend/config/**/*.js"
+    ],
+    "reporter": [
+      "lcov",
+      "text",
+      "text-summary"
+    ],
+    "all": true
+  },
+  "devDependencies": {
+    "artillery": "^2.0.0",
+    "@faker-js/faker": "^8.0.0",
+    "axios": "^1.6.0"
+  }
+} 

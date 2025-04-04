@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forum - Discussion Board</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/forum.css">
+    <link rel="stylesheet" href="../css/utils.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>Forum</h1>
+            </div>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="forum.html" class="active">Forum</a>
+                <a href="upgrade.html">Upgrade</a>
+                <div class="user-menu">
+                    <span id="usernameDisplay">Guest</span>
+                    <div class="dropdown-content">
+                        <a href="profile.html">Profile</a>
+                        <a href="#" id="logoutBtn">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="forum-container">
+        <div class="forum-header">
+            <h2>Forum Categories</h2>
+            <button id="newThreadBtn" class="btn primary">New Thread</button>
+        </div>
+
+        <div class="categories">
+            <!-- General Discussion -->
+            <div class="category">
+                <div class="category-header">
+                    <h3>General Discussion</h3>
+                    <span class="thread-count">24 threads</span>
+                </div>
+                <div class="threads">
+                    <div class="thread">
+                        <div class="thread-info">
+                            <h4><a href="thread.html?id=1">Welcome to the Forum!</a></h4>
+                            <p>Started by <a href="profile.html?user=admin">Admin</a> • 2 days ago</p>
+                        </div>
+                        <div class="thread-stats">
+                            <span>15 replies</span>
+                            <span>245 views</span>
+                        </div>
+                    </div>
+                    <!-- More threads will be loaded dynamically -->
+                </div>
+            </div>
+
+            <!-- Announcements -->
+            <div class="category">
+                <div class="category-header">
+                    <h3>Announcements</h3>
+                    <span class="thread-count">8 threads</span>
+                </div>
+                <div class="threads">
+                    <div class="thread">
+                        <div class="thread-info">
+                            <h4><a href="thread.html?id=2">New Features Coming Soon!</a></h4>
+                            <p>Started by <a href="profile.html?user=moderator">Moderator</a> • 1 day ago</p>
+                        </div>
+                        <div class="thread-stats">
+                            <span>8 replies</span>
+                            <span>120 views</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Help & Support -->
+            <div class="category">
+                <div class="category-header">
+                    <h3>Help & Support</h3>
+                    <span class="thread-count">12 threads</span>
+                </div>
+                <div class="threads">
+                    <div class="thread">
+                        <div class="thread-info">
+                            <h4><a href="thread.html?id=3">How to Use the Forum</a></h4>
+                            <p>Started by <a href="profile.html?user=helper">Helper</a> • 3 days ago</p>
+                        </div>
+                        <div class="thread-stats">
+                            <span>5 replies</span>
+                            <span>89 views</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- New Thread Modal -->
+        <div id="newThreadModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Create New Thread</h2>
+                <form id="newThreadForm">
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" name="category" required>
+                            <option value="general">General Discussion</option>
+                            <option value="announcements">Announcements</option>
+                            <option value="help">Help & Support</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="content">Content</label>
+                        <textarea id="content" name="content" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn primary">Create Thread</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Forum Website. All rights reserved.</p>
+    </footer>
+
+    <!-- Utility Scripts -->
+    <script type="module" src="../js/utils/api.js"></script>
+    <script type="module" src="../js/utils/ui.js"></script>
+    
+    <!-- Forum Script -->
+    <script type="module" src="../js/forum.js"></script>
+</body>
+</html> 

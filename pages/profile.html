@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Forum Website</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/profile.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>Forum</h1>
+            </div>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="forum.html">Forum</a>
+                <a href="upgrade.html">Upgrade</a>
+                <div class="user-menu">
+                    <span id="usernameDisplay">Guest</span>
+                    <div class="dropdown-content">
+                        <a href="profile.html" class="active">Profile</a>
+                        <a href="#" id="logoutBtn">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="profile-container">
+        <div class="profile-header">
+            <div class="profile-banner">
+                <img src="../assets/images/default-banner.jpg" alt="Profile Banner" id="profileBanner">
+                <div class="profile-avatar">
+                    <img src="../assets/images/default-avatar.png" alt="Avatar" id="profileAvatar">
+                    <button class="btn small edit-avatar-btn" id="editAvatarBtn">Edit</button>
+                </div>
+            </div>
+            <div class="profile-info">
+                <h1 id="profileUsername">Username</h1>
+                <div class="rank-badge" id="rankBadge">
+                    <span class="rank-name">Member</span>
+                    <span class="rank-expiry" id="rankExpiry"></span>
+                </div>
+                <div class="profile-stats">
+                    <div class="stat">
+                        <span class="stat-value" id="postCount">0</span>
+                        <span class="stat-label">Posts</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="threadCount">0</span>
+                        <span class="stat-label">Threads</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="likeCount">0</span>
+                        <span class="stat-label">Likes</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-content">
+            <div class="profile-tabs">
+                <button class="tab-btn active" data-tab="activity">Activity</button>
+                <button class="tab-btn" data-tab="threads">Threads</button>
+                <button class="tab-btn" data-tab="replies">Replies</button>
+                <button class="tab-btn" data-tab="settings">Settings</button>
+            </div>
+
+            <div class="tab-content active" id="activityTab">
+                <h2>Recent Activity</h2>
+                <div class="activity-list" id="activityList">
+                    <!-- Activity items will be added here dynamically -->
+                </div>
+            </div>
+
+            <div class="tab-content" id="threadsTab">
+                <h2>Your Threads</h2>
+                <div class="threads-list" id="threadsList">
+                    <!-- Thread items will be added here dynamically -->
+                </div>
+            </div>
+
+            <div class="tab-content" id="repliesTab">
+                <h2>Your Replies</h2>
+                <div class="replies-list" id="repliesList">
+                    <!-- Reply items will be added here dynamically -->
+                </div>
+            </div>
+
+            <div class="tab-content" id="settingsTab">
+                <h2>Profile Settings</h2>
+                <form id="profileSettingsForm">
+                    <div class="form-group">
+                        <label for="displayName">Display Name</label>
+                        <input type="text" id="displayName" name="displayName">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="bio">Bio</label>
+                        <textarea id="bio" name="bio" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="signature">Forum Signature</label>
+                        <textarea id="signature" name="signature" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Forum Website. All rights reserved.</p>
+    </footer>
+
+    <script src="../js/utils/session.js"></script>
+    <script src="../js/api/authService.js"></script>
+    <script src="../js/profile.js"></script>
+</body>
+</html> 

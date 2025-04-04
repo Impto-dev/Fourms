@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upgrade - Forum Website</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/upgrade.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>Forum</h1>
+            </div>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="forum.html">Forum</a>
+                <a href="upgrade.html" class="active">Upgrade</a>
+                <div class="user-menu">
+                    <span id="usernameDisplay">Guest</span>
+                    <div class="dropdown-content">
+                        <a href="profile.html">Profile</a>
+                        <a href="#" id="logoutBtn">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="upgrade-container">
+        <h2>Upgrade Your Account</h2>
+        <p class="subtitle">Choose a rank that suits your needs and unlock exclusive features!</p>
+
+        <div class="ranks">
+            <!-- Premium Rank -->
+            <div class="rank-card">
+                <div class="rank-header">
+                    <h3>Premium</h3>
+                    <div class="price">$4.99<span class="period">/month</span></div>
+                </div>
+                <ul class="features">
+                    <li>Custom username color</li>
+                    <li>Larger avatar size</li>
+                    <li>Priority support</li>
+                    <li>Ad-free experience</li>
+                    <li>Early access to new features</li>
+                </ul>
+                <button class="btn primary upgrade-btn" data-rank="premium">Upgrade to Premium</button>
+            </div>
+
+            <!-- VIP Rank -->
+            <div class="rank-card featured">
+                <div class="rank-header">
+                    <h3>VIP</h3>
+                    <div class="price">$9.99<span class="period">/month</span></div>
+                </div>
+                <ul class="features">
+                    <li>All Premium features</li>
+                    <li>Custom profile banner</li>
+                    <li>Exclusive VIP badge</li>
+                    <li>Unlimited thread creation</li>
+                    <li>Priority thread placement</li>
+                    <li>Advanced profile customization</li>
+                </ul>
+                <button class="btn primary upgrade-btn" data-rank="vip">Upgrade to VIP</button>
+            </div>
+
+            <!-- Elite Rank -->
+            <div class="rank-card">
+                <div class="rank-header">
+                    <h3>Elite</h3>
+                    <div class="price">$19.99<span class="period">/month</span></div>
+                </div>
+                <ul class="features">
+                    <li>All VIP features</li>
+                    <li>Custom title</li>
+                    <li>Exclusive Elite badge</li>
+                    <li>Unlimited attachments</li>
+                    <li>Priority moderation queue</li>
+                    <li>Access to private forums</li>
+                    <li>Custom emoji support</li>
+                </ul>
+                <button class="btn primary upgrade-btn" data-rank="elite">Upgrade to Elite</button>
+            </div>
+        </div>
+
+        <!-- Payment Modal -->
+        <div id="paymentModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Complete Your Purchase</h2>
+                <form id="paymentForm">
+                    <div class="form-group">
+                        <label for="cardNumber">Card Number</label>
+                        <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="expiryDate">Expiry Date</label>
+                            <input type="text" id="expiryDate" placeholder="MM/YY" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cvv">CVV</label>
+                            <input type="text" id="cvv" placeholder="123" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="cardName">Name on Card</label>
+                        <input type="text" id="cardName" required>
+                    </div>
+                    <div class="selected-rank">
+                        <span>Selected Rank:</span>
+                        <span id="selectedRankName">Premium</span>
+                    </div>
+                    <div class="total">
+                        <span>Total:</span>
+                        <span id="totalAmount">$4.99</span>
+                    </div>
+                    <button type="submit" class="btn primary">Complete Purchase</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Forum Website. All rights reserved.</p>
+    </footer>
+
+    <script src="../js/utils/session.js"></script>
+    <script src="../js/api/authService.js"></script>
+    <script src="../js/upgrade.js"></script>
+</body>
+</html> 

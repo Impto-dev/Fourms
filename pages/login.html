@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Forum Website</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/auth.css">
+    <link rel="stylesheet" href="../css/utils.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>Forum</h1>
+            </div>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="forum.html">Forum</a>
+                <a href="upgrade.html">Upgrade</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="auth-container">
+        <div class="auth-box">
+            <h2>Login to Your Account</h2>
+            
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn primary">Login</button>
+                </div>
+            </form>
+
+            <div class="divider">
+                <span>OR</span>
+            </div>
+
+            <div class="social-login">
+                <button id="discordLogin" class="btn discord">
+                    <img src="../assets/icons/discord.svg" alt="Discord" class="social-icon">
+                    Login with Discord
+                </button>
+            </div>
+
+            <div class="auth-links">
+                <a href="register.html">Don't have an account? Register</a>
+                <a href="forgot-password.html">Forgot Password?</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Forum Website. All rights reserved.</p>
+    </footer>
+
+    <!-- Utility Scripts -->
+    <script type="module" src="../js/utils/api.js"></script>
+    <script type="module" src="../js/utils/ui.js"></script>
+    
+    <!-- Auth Script -->
+    <script type="module" src="../js/auth.js"></script>
+</body>
+</html> 

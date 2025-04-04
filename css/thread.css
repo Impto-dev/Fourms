@@ -1,0 +1,155 @@
+/* Thread Container */
+.thread-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+/* Thread Header */
+.thread-header {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.thread-header h2 {
+    margin: 0;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+}
+
+.thread-meta {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.thread-meta a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.thread-meta a:hover {
+    text-decoration: underline;
+}
+
+/* Posts */
+.posts {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.post {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+}
+
+.original-post {
+    border: 2px solid #3498db;
+}
+
+.post-author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.author-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.author-info a {
+    color: #2c3e50;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.author-info a:hover {
+    color: #3498db;
+}
+
+.post-date {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.post-content {
+    line-height: 1.6;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.post-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.btn.small {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.9rem;
+}
+
+/* Reply Form */
+.reply-form {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 2rem;
+}
+
+.reply-form h3 {
+    margin: 0;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+.reply-form textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.reply-form textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .thread-container {
+        padding: 0 1rem;
+    }
+
+    .post-author {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .post-actions {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+} 

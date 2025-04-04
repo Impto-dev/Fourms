@@ -1,0 +1,260 @@
+/* Profile Container */
+.profile-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+/* Profile Header */
+.profile-header {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.profile-banner {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.profile-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-avatar {
+    position: absolute;
+    bottom: -50px;
+    left: 2rem;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 4px solid white;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.edit-avatar-btn {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 0.25rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.profile-avatar:hover .edit-avatar-btn {
+    opacity: 1;
+}
+
+.profile-info {
+    padding: 4rem 2rem 2rem;
+}
+
+.profile-info h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+.rank-badge {
+    display: inline-block;
+    background: #f8f9fa;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+}
+
+.rank-name {
+    font-weight: bold;
+    color: #3498db;
+    margin-right: 0.5rem;
+}
+
+.rank-expiry {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.profile-stats {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.stat-label {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Profile Content */
+.profile-content {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+}
+
+.profile-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    color: #666;
+    font-size: 1rem;
+    position: relative;
+}
+
+.tab-btn.active {
+    color: #3498db;
+    font-weight: bold;
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1rem;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #3498db;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Activity List */
+.activity-list, .threads-list, .replies-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.activity-item, .thread-item, .reply-item {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.activity-item:hover, .thread-item:hover, .reply-item:hover {
+    background: #f1f3f5;
+}
+
+.activity-content, .thread-content, .reply-content {
+    flex: 1;
+}
+
+.activity-date, .thread-date, .reply-date {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Settings Form */
+#profileSettingsForm {
+    max-width: 600px;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+textarea {
+    resize: vertical;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .profile-container {
+        padding: 0 1rem;
+    }
+
+    .profile-banner {
+        height: 150px;
+    }
+
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+        bottom: -40px;
+    }
+
+    .profile-info {
+        padding: 3rem 1rem 1rem;
+    }
+
+    .profile-stats {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .profile-tabs {
+        flex-wrap: wrap;
+    }
+
+    .tab-btn {
+        flex: 1;
+        text-align: center;
+    }
+} 
