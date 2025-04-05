@@ -1,19 +1,25 @@
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+import fs from 'fs';
+import path from 'path';
+import { execSync } from 'child_process';
+import { fileURLToPath } from 'url';
+import imagemin from 'imagemin';
+import imageminMozjpeg from 'imagemin-mozjpeg';
+import imageminPngquant from 'imagemin-pngquant';
+import imageminSvgo from 'imagemin-svgo';
+import workbox from 'workbox-build';
+
+// Get directory name in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Paths
 const BUILD_DIR = path.join(__dirname, '../build');
 const STATIC_DIR = path.join(BUILD_DIR, 'static');
 
 // Optimization functions
-function optimizeImages() {
+async function optimizeImages() {
   console.log('Optimizing images...');
-  const imagemin = require('imagemin');
-  const imageminMozjpeg = require('imagemin-mozjpeg');
-  const imageminPngquant = require('imagemin-pngquant');
-  const imageminSvgo = require('imagemin-svgo');
-
+  
   return imagemin([`${STATIC_DIR}/media/*.{jpg,png,svg}`], {
     destination: `${STATIC_DIR}/media`,
     plugins: [
@@ -26,9 +32,8 @@ function optimizeImages() {
   });
 }
 
-function generateServiceWorker() {
+async function generateServiceWorker() {
   console.log('Generating service worker...');
-  const workbox = require('workbox-build');
   
   return workbox.generateSW({
     swDest: path.join(BUILD_DIR, 'service-worker.js'),
@@ -79,7 +84,7 @@ function compressAssets() {
 function updateManifest() {
   console.log('Updating manifest...');
   const manifestPath = path.join(BUILD_DIR, 'manifest.json');
-  const manifest = require(manifestPath);
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
   
   manifest.start_url = '/';
   manifest.display = 'standalone';
@@ -108,8 +113,8 @@ async function optimize() {
 }
 
 // Run optimization if called directly
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   optimize();
 }
 
-module.exports = optimize; 
+export default optimize; 
