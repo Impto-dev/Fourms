@@ -1,77 +1,76 @@
-import fs from 'fs';
-import path from 'path';
-import { execSync } from 'child_process';
-import { fileURLToPath } from 'url';
-import imagemin from 'imagemin';
-import imageminMozjpeg from 'imagemin-mozjpeg';
-import imageminPngquant from 'imagemin-pngquant';
-import imageminSvgo from 'imagemin-svgo';
-import workbox from 'workbox-build';
-
-// Get directory name in ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const fs = require('fs');
+const path = require('path');
+const { execSync } = require('child_process');
 
 // Paths
 const BUILD_DIR = path.join(__dirname, '../build');
 const STATIC_DIR = path.join(BUILD_DIR, 'static');
+const PUBLIC_DIR = path.join(__dirname, '../public');
 
 // Optimization functions
 async function optimizeImages() {
   console.log('Optimizing images...');
   
-  return imagemin([`${STATIC_DIR}/media/*.{jpg,png,svg}`], {
-    destination: `${STATIC_DIR}/media`,
+  // Dynamic imports for ES modules
+  const imagemin = (await import('imagemin')).default;
+  const imageminMozjpeg = (await import('imagemin-mozjpeg')).default;
+  const imageminPngquant = (await import('imagemin-pngquant')).default;
+  const imageminSvgo = (await import('imagemin-svgo')).default;
+  
+  const imageFiles = await imagemin([`${PUBLIC_DIR}/**/*.{jpg,jpeg,png,svg}`], {
+    destination: `${BUILD_DIR}/static/media`,
     plugins: [
       imageminMozjpeg({ quality: 80 }),
       imageminPngquant({ quality: [0.6, 0.8] }),
       imageminSvgo({
-        plugins: [{ removeViewBox: false }]
+        plugins: [
+          { removeViewBox: false },
+          { cleanupIDs: false }
+        ]
       })
     ]
   });
+
+  console.log(`Optimized ${imageFiles.length} images`);
 }
 
 async function generateServiceWorker() {
   console.log('Generating service worker...');
   
-  return workbox.generateSW({
-    swDest: path.join(BUILD_DIR, 'service-worker.js'),
+  // Dynamic import for workbox-build
+  const { generateSW } = await import('workbox-build');
+  
+  const { count, size } = await generateSW({
+    swDest: `${BUILD_DIR}/service-worker.js`,
     globDirectory: BUILD_DIR,
     globPatterns: [
-      '**/*.{js,css,html,png,jpg,svg,ico}'
+      '**/*.{js,css,html,png,jpg,jpeg,svg,gif,ico,json}'
     ],
     skipWaiting: true,
     clientsClaim: true,
-    runtimeCaching: [{
-      urlPattern: /\.(?:png|jpg|jpeg|svg|gif)$/,
-      handler: 'CacheFirst',
-      options: {
-        cacheName: 'images',
-        expiration: {
-          maxEntries: 60,
-          maxAgeSeconds: 30 * 24 * 60 * 60 // 30 days
+    runtimeCaching: [
+      {
+        urlPattern: /\.(?:png|jpg|jpeg|svg|gif)$/,
+        handler: 'CacheFirst',
+        options: {
+          cacheName: 'images',
+          expiration: {
+            maxEntries: 60,
+            maxAgeSeconds: 30 * 24 * 60 * 60 // 30 days
+          }
+        }
+      },
+      {
+        urlPattern: /\.(?:js|css)$/,
+        handler: 'StaleWhileRevalidate',
+        options: {
+          cacheName: 'static-resources'
         }
       }
-    }, {
-      urlPattern: /\.(?:js|css)$/,
-      handler: 'StaleWhileRevalidate',
-      options: {
-        cacheName: 'static-resources'
-      }
-    }, {
-      urlPattern: /^https:\/\/api\./,
-      handler: 'NetworkFirst',
-      options: {
-        cacheName: 'api-cache',
-        networkTimeoutSeconds: 10,
-        expiration: {
-          maxEntries: 50,
-          maxAgeSeconds: 5 * 60 // 5 minutes
-        }
-      }
-    }]
+    ]
   });
+
+  console.log(`Generated service worker with ${count} files, totaling ${(size / 1024 / 1024).toFixed(2)} MB.`);
 }
 
 function compressAssets() {
@@ -113,8 +112,8 @@ async function optimize() {
 }
 
 // Run optimization if called directly
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (require.main === module) {
   optimize();
 }
 
-export default optimize; 
+module.exports = optimize; 

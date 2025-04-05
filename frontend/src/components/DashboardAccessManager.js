@@ -11,22 +11,28 @@ import {
   TableHead,
   TableRow,
   Button,
+  IconButton,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  TextField,
-  FormControlLabel,
-  Checkbox,
   Alert,
   CircularProgress
 } from '@mui/material';
+import {
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+  Add as AddIcon
+} from '@mui/icons-material';
+import { checkPermissions } from '../utils/auth';
 import { useNavigate } from 'react-router-dom';
 
 const DashboardAccessManager = () => {
-  const [accessList, setAccessList] = useState([]);
+  const navigate = useNavigate();
+  const [hasPermission, setHasPermission] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [users, setUsers] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [permissions, setPermissions] = useState({
@@ -35,49 +41,18 @@ const DashboardAccessManager = () => {
     updateThresholds: false,
     manageAccess: false
   });
-  const navigate = useNavigate();
 
   useEffect(() => {
-    checkPermissions();
-    fetchAccessList();
-  }, []);
-
-  const checkPermissions = async () => {
-    try {
-      // First check if user is admin
-      const adminResponse = await fetch('/api/auth/me');
-      const adminData = await adminResponse.json();
-      
-      if (!adminData.isAdmin) {
+    const checkAccess = async () => {
+      const hasAccess = await checkPermissions(['admin']);
+      setHasPermission(hasAccess);
+      if (!hasAccess) {
         navigate('/');
-        return;
       }
-
-      // Then check for manageAccess permission
-      const permissionResponse = await fetch('/api/dashboard/access/me/permission?permission=manageAccess');
-      const permissionData = await permissionResponse.json();
-      
-      if (!permissionData.hasPermission) {
-        navigate('/');
-        return;
-      }
-    } catch (err) {
-      navigate('/');
-    }
-  };
-
-  const fetchAccessList = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch('/api/dashboard/access');
-      const data = await response.json();
-      setAccessList(data);
       setLoading(false);
-    } catch (err) {
-      setError('Failed to fetch access list');
-      setLoading(false);
-    }
-  };
+    };
+    checkAccess();
+  }, [checkPermissions, navigate]);
 
   const handleOpenDialog = (user = null) => {
     if (user) {
@@ -175,7 +150,7 @@ const DashboardAccessManager = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {accessList.map((access) => (
+            {users.map((access) => (
               <TableRow key={access._id}>
                 <TableCell>
                   {access.user.username} ({access.user.email})

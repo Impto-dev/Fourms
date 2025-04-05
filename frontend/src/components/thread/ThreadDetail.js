@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -17,16 +18,28 @@ import {
     Divider,
     CircularProgress,
     Alert,
-    Pagination
+    Pagination,
+    Container,
+    Paper,
+    Avatar,
+    Chip,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions
 } from '@mui/material';
 import {
     Edit as EditIcon,
     Delete as DeleteIcon,
     MoreVert as MoreVertIcon,
-    Reply as ReplyIcon
+    Reply as ReplyIcon,
+    ThumbUp as ThumbUpIcon,
+    ThumbDown as ThumbDownIcon
 } from '@mui/icons-material';
 import { formatDistanceToNow } from 'date-fns';
 import { Editor } from '@tinymce/tinymce-react';
+import { fetchThread, fetchPosts, createPost, updatePost, deletePost } from '../../store/slices/threadSlice';
+import { checkPermissions } from '../../utils/auth';
 
 const schema = yup.object().shape({
     content: yup.string()
@@ -35,12 +48,14 @@ const schema = yup.object().shape({
 });
 
 const ThreadDetail = () => {
-    const { threadId } = useParams();
+    const { id } = useParams();
     const navigate = useNavigate();
-    const [thread, setThread] = useState(null);
-    const [posts, setPosts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
+    const dispatch = useDispatch();
+    const { thread, posts, loading, error } = useSelector((state) => state.thread);
+    const [hasPermission, setHasPermission] = useState(false);
+    const [openDialog, setOpenDialog] = useState(false);
+    const [selectedPost, setSelectedPost] = useState(null);
+    const [content, setContent] = useState('');
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [replyContent, setReplyContent] = useState('');
@@ -54,43 +69,31 @@ const ThreadDetail = () => {
     });
 
     useEffect(() => {
-        fetchThread();
-        fetchPosts();
-    }, [threadId, page]);
+        const checkAccess = async () => {
+            const hasAccess = await checkPermissions(['user']);
+            setHasPermission(hasAccess);
+            if (!hasAccess) {
+                navigate('/login');
+            }
+        };
+        checkAccess();
+    }, [checkPermissions, navigate]);
 
-    const fetchThread = async () => {
-        try {
-            const response = await axios.get(`/api/threads/${threadId}`);
-            setThread(response.data);
-        } catch (err) {
-            setError('Failed to fetch thread');
-            console.error('Error fetching thread:', err);
+    useEffect(() => {
+        if (id) {
+            dispatch(fetchThread(id));
+            dispatch(fetchPosts(id));
         }
-    };
-
-    const fetchPosts = async () => {
-        try {
-            const response = await axios.get(`/api/threads/${threadId}/posts`, {
-                params: { page }
-            });
-            setPosts(response.data.posts);
-            setTotalPages(response.data.totalPages);
-        } catch (err) {
-            setError('Failed to fetch posts');
-            console.error('Error fetching posts:', err);
-        } finally {
-            setLoading(false);
-        }
-    };
+    }, [dispatch, id]);
 
     const handleReply = async (data) => {
         try {
-            await axios.post(`/api/threads/${threadId}/posts`, {
+            await axios.post(`/api/threads/${id}/posts`, {
                 content: replyContent
             });
             setReplyContent('');
             setShowReplyForm(false);
-            fetchPosts();
+            dispatch(fetchPosts(id));
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to post reply');
         }
@@ -98,11 +101,11 @@ const ThreadDetail = () => {
 
     const handleEdit = async () => {
         try {
-            await axios.put(`/api/threads/${threadId}`, {
+            await axios.put(`/api/threads/${id}`, {
                 content: editContent
             });
             setIsEditing(false);
-            fetchThread();
+            dispatch(fetchThread(id));
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to update thread');
         }
@@ -110,7 +113,7 @@ const ThreadDetail = () => {
 
     const handleDelete = async () => {
         try {
-            await axios.delete(`/api/threads/${threadId}`);
+            await axios.delete(`/api/threads/${id}`);
             navigate('/threads');
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to delete thread');

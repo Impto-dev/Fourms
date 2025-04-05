@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import {
     Box,
     Card,
@@ -15,33 +16,52 @@ import {
     Grid,
     Chip,
     IconButton,
-    Tooltip
+    Tooltip,
+    Container,
+    Paper,
+    CircularProgress,
+    Alert
 } from '@mui/material';
 import {
     Add as AddIcon,
     Sort as SortIcon,
-    FilterList as FilterIcon
+    Search as SearchIcon
 } from '@mui/icons-material';
 import axios from 'axios';
 import { formatDistanceToNow } from 'date-fns';
+import { fetchThreads } from '../../store/slices/threadSlice';
+import { checkPermissions } from '../../utils/auth';
 
 const ThreadList = () => {
     const navigate = useNavigate();
-    const [threads, setThreads] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
+    const dispatch = useDispatch();
+    const { threads, loading, error, totalPages } = useSelector((state) => state.thread);
+    const [hasPermission, setHasPermission] = useState(false);
     const [page, setPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
-    const [search, setSearch] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
     const [category, setCategory] = useState('');
     const [sortBy, setSortBy] = useState('createdAt');
     const [sortOrder, setSortOrder] = useState('desc');
     const [categories, setCategories] = useState([]);
 
     useEffect(() => {
+        const checkAccess = async () => {
+            const hasAccess = await checkPermissions(['user']);
+            setHasPermission(hasAccess);
+            if (!hasAccess) {
+                navigate('/login');
+            }
+        };
+        checkAccess();
+    }, [checkPermissions, navigate]);
+
+    useEffect(() => {
+        dispatch(fetchThreads({ page, search: searchQuery }));
+    }, [dispatch, page, searchQuery]);
+
+    useEffect(() => {
         fetchCategories();
-        fetchThreads();
-    }, [page, search, category, sortBy, sortOrder]);
+    }, []);
 
     const fetchCategories = async () => {
         try {
@@ -49,29 +69,6 @@ const ThreadList = () => {
             setCategories(response.data);
         } catch (err) {
             console.error('Error fetching categories:', err);
-        }
-    };
-
-    const fetchThreads = async () => {
-        try {
-            setLoading(true);
-            const response = await axios.get('/api/threads', {
-                params: {
-                    page,
-                    search,
-                    category,
-                    sortBy,
-                    sortOrder
-                }
-            });
-            setThreads(response.data.threads);
-            setTotalPages(response.data.totalPages);
-            setError('');
-        } catch (err) {
-            setError('Failed to fetch threads');
-            console.error('Error fetching threads:', err);
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -105,8 +102,8 @@ const ThreadList = () => {
                             fullWidth
                             label="Search threads"
                             variant="outlined"
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </Grid>
                     <Grid item xs={12} sm={3}>

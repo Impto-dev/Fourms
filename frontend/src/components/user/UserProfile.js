@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -24,12 +25,13 @@ import {
 import {
     Edit as EditIcon,
     MoreVert as MoreVertIcon,
-    Person as PersonIcon,
     Email as EmailIcon,
     CalendarToday as CalendarIcon,
     Delete as DeleteIcon
 } from '@mui/icons-material';
 import { formatDistanceToNow } from 'date-fns';
+import { fetchUser, fetchPosts, fetchThreads } from '../../store/slices/userSlice';
+import { checkPermissions } from '../../utils/auth';
 
 const schema = yup.object().shape({
     username: yup.string()
@@ -44,15 +46,13 @@ const schema = yup.object().shape({
 });
 
 const UserProfile = () => {
-    const { userId } = useParams();
+    const { id } = useParams();
     const navigate = useNavigate();
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
-    const [isEditing, setIsEditing] = useState(false);
+    const dispatch = useDispatch();
+    const { user, posts, threads, loading, error } = useSelector((state) => state.user);
+    const [hasPermission, setHasPermission] = useState(false);
     const [activeTab, setActiveTab] = useState(0);
-    const [threads, setThreads] = useState([]);
-    const [posts, setPosts] = useState([]);
+    const [isEditing, setIsEditing] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
@@ -60,58 +60,31 @@ const UserProfile = () => {
     });
 
     useEffect(() => {
-        fetchUser();
-        if (activeTab === 0) {
-            fetchThreads();
-        } else {
-            fetchPosts();
-        }
-    }, [userId, activeTab]);
+        const checkAccess = async () => {
+            const hasAccess = await checkPermissions(['user']);
+            setHasPermission(hasAccess);
+            if (!hasAccess) {
+                navigate('/login');
+            }
+        };
+        checkAccess();
+    }, [checkPermissions, navigate]);
 
-    const fetchUser = async () => {
-        try {
-            setLoading(true);
-            const response = await axios.get(`/api/users/${userId}`);
-            setUser(response.data);
-            reset({
-                username: response.data.username,
-                email: response.data.email,
-                bio: response.data.bio || ''
-            });
-            setError('');
-        } catch (err) {
-            setError('Failed to fetch user');
-            console.error('Error fetching user:', err);
-        } finally {
-            setLoading(false);
+    useEffect(() => {
+        if (id) {
+            dispatch(fetchUser(id));
+            dispatch(fetchPosts(id));
+            dispatch(fetchThreads(id));
         }
-    };
-
-    const fetchThreads = async () => {
-        try {
-            const response = await axios.get(`/api/users/${userId}/threads`);
-            setThreads(response.data);
-        } catch (err) {
-            console.error('Error fetching threads:', err);
-        }
-    };
-
-    const fetchPosts = async () => {
-        try {
-            const response = await axios.get(`/api/users/${userId}/posts`);
-            setPosts(response.data);
-        } catch (err) {
-            console.error('Error fetching posts:', err);
-        }
-    };
+    }, [dispatch, id]);
 
     const handleProfileSubmit = async (data) => {
         try {
-            await axios.put(`/api/users/${userId}`, data);
+            await axios.put(`/api/users/${id}`, data);
             setIsEditing(false);
-            fetchUser();
+            dispatch(fetchUser(id));
         } catch (err) {
-            setError(err.response?.data?.message || 'Failed to update profile');
+            console.error('Error updating profile:', err);
         }
     };
 
@@ -125,10 +98,10 @@ const UserProfile = () => {
 
     const handleDeleteAccount = async () => {
         try {
-            await axios.delete(`/api/users/${userId}`);
+            await axios.delete(`/api/users/${id}`);
             navigate('/');
         } catch (err) {
-            setError(err.response?.data?.message || 'Failed to delete account');
+            console.error('Error deleting account:', err);
         }
     };
 

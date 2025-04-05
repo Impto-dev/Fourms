@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   Box,
   Container,
@@ -22,10 +23,20 @@ import {
 } from '@mui/material';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useNavigate } from 'react-router-dom';
+import {
+  Refresh as RefreshIcon,
+  TrendingUp as TrendingUpIcon,
+  People as PeopleIcon,
+  Forum as ForumIcon,
+  Warning as WarningIcon
+} from '@mui/icons-material';
+import { fetchStats, fetchViolations } from '../store/slices/adminSlice';
+import { checkPermissions } from '../utils/auth';
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
+  const { stats, loading, error } = useSelector((state) => state.admin);
   const [activeTab, setActiveTab] = useState(0);
-  const [stats, setStats] = useState(null);
   const [violations, setViolations] = useState([]);
   const [selectedIP, setSelectedIP] = useState('');
   const [ipStats, setIpStats] = useState(null);
@@ -34,47 +45,24 @@ const Dashboard = () => {
     daily: 30,
     weekly: 100
   });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [userPermissions, setUserPermissions] = useState(null);
+  const [hasPermission, setHasPermission] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    checkPermissions();
-    fetchStats();
-  }, []);
-
-  const checkPermissions = async () => {
-    try {
-      const response = await fetch('/api/dashboard/access/me/permission?permission=view');
-      const data = await response.json();
-      
-      if (!data.hasPermission) {
-        navigate('/'); // Redirect to home if no permission
-        return;
+    const checkAccess = async () => {
+      const hasAccess = await checkPermissions(['admin']);
+      setHasPermission(hasAccess);
+      if (hasAccess) {
+        dispatch(fetchStats());
+      } else {
+        navigate('/');
       }
+    };
+    checkAccess();
+  }, [dispatch, checkPermissions, navigate]);
 
-      // Check other permissions
-      const permissionsResponse = await fetch('/api/dashboard/access/me');
-      const permissionsData = await permissionsResponse.json();
-      setUserPermissions(permissionsData.permissions);
-    } catch (err) {
-      navigate('/'); // Redirect to home if error
-    }
-  };
-
-  const fetchStats = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch('/api/dashboard/stats');
-      const data = await response.json();
-      setStats(data.stats);
-      setThresholds(data.thresholds);
-      setLoading(false);
-    } catch (err) {
-      setError('Failed to fetch statistics');
-      setLoading(false);
-    }
+  const handleRefresh = () => {
+    dispatch(fetchStats());
   };
 
   const fetchViolations = async (type, period) => {
@@ -106,7 +94,7 @@ const Dashboard = () => {
   const handleUnblockIP = async (ip) => {
     try {
       await fetch(`/api/dashboard/ip/${ip}/unblock`, { method: 'POST' });
-      fetchStats(); // Refresh stats after unblocking
+      dispatch(fetchStats()); // Refresh stats after unblocking
     } catch (err) {
       setError('Failed to unblock IP');
     }
@@ -147,7 +135,7 @@ const Dashboard = () => {
   );
 
   const renderBlockedIPsTab = () => {
-    if (!userPermissions?.manageIPs) {
+    if (!hasPermission) {
       return (
         <Alert severity="info">
           You don't have permission to manage IPs.
@@ -216,7 +204,7 @@ const Dashboard = () => {
   );
 
   const renderThresholdsTab = () => {
-    if (!userPermissions?.updateThresholds) {
+    if (!hasPermission) {
       return (
         <Alert severity="info">
           You don't have permission to update thresholds.

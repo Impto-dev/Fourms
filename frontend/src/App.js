@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { ThemeProvider, CssBaseline } from '@mui/material';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 import { store } from './store';
-import AppRoutes from './routes';
+import AppRoutes from './AppRoutes';
 import theme from './theme';
 import { fetchUser } from './store/slices/authSlice';
 import Dashboard from './components/Dashboard';
@@ -25,18 +25,20 @@ const App = () => {
             <ThemeProvider theme={theme}>
                 <CssBaseline />
                 <BrowserRouter>
-                    <AppRoutes />
-                    <Route path="/dashboard/login" element={<DashboardLogin />} />
-                    <Route path="/dashboard" element={
-                        <ProtectedRoute>
-                            <Dashboard />
-                        </ProtectedRoute>
-                    } />
-                    <Route path="/dashboard/access" element={
-                        <ProtectedRoute>
-                            <DashboardAccessManager />
-                        </ProtectedRoute>
-                    } />
+                    <Routes>
+                        <Route path="/dashboard/login" element={<DashboardLogin />} />
+                        <Route path="/dashboard" element={
+                            <ProtectedRoute>
+                                <Dashboard />
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/dashboard/access" element={
+                            <ProtectedRoute>
+                                <DashboardAccessManager />
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/*" element={<AppRoutes />} />
+                    </Routes>
                 </BrowserRouter>
             </ThemeProvider>
         </Provider>
